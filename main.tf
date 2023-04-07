@@ -4,19 +4,19 @@ provider "aws {
 }
 
 
-resource "aws_instance" "devserver" {
+resource "aws_instance" "everyshilling" {
   ami= "ami-004811053d831c2c2"
   instance_type = "t3.medium"
   key_name="popo"
 
-  security_groups = [aws_security_group.devserver]
+  security_groups = [aws_security_group.everyshilling]
   tags = {
-    Name = "devserverTF"
+    Name = "EveryshillingTF"
   }
 
 }
 
-resource "aws_security_group" "devserver" {
+resource "aws_security_group" "everyshilling" {
     name = "Security-Group"
     description= "dev environment on test"
 
