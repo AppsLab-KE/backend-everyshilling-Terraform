@@ -1,5 +1,5 @@
 variable "tags" {
-  description = "The tags to be used for the different resources in the Elcy project"
+  description = "The tags to be used for the different resources in the Everyshilling application"
   type        = map(string)
   default     = {}
 }
@@ -12,7 +12,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "The availability zones for the region"
   type        = list(string)
-  default     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
 variable "private_subnets" {
