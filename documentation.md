@@ -20,3 +20,7 @@ cat ./ssh/id_rsa.pub
 
 
 docker-compose run --rm tf plan -var-file=tfvars/dev.tfvars
+
+
+aws configure --profile elcy-dev
+docker run -d -it --name terraform-ubuntu ubuntu 
