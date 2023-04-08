@@ -8,7 +8,7 @@ module "ec2_instance" {
   instance_type          = var.ec2_instance_type
   key_name               = format("elcy-%s", var.tags["environment"])
   monitoring             = var.enable_ec2_monitoring
-  vpc_security_group_ids = [aws_security_group.this.id]
+  vpc_security_group_ids = [aws_security_group.sg.id]
   subnet_id              = module.vpc.public_subnets[0]
 
   tags = {
