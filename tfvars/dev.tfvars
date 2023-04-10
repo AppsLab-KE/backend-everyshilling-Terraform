@@ -13,13 +13,18 @@ sg_ports = {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ssh = {
+  tcp = {
     port        = 4010
-    protocol    = "tcp"
+    protocol    = "tcp" .
     cidr_blocks = ["0.0.0.0/0"]
   }
   https = {
     port        = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tcp = {
+    port        = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
