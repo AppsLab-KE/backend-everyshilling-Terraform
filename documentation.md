@@ -4,10 +4,22 @@ For the Infrastructure setup, l decided to use docker containers to reduce the s
 I also opted to use Codespace envronment for easy accessiblity of the IAM secret and access keys. A great starting point is to click the " Use this template button " for your setup
 
 # COMMANDS TO RUN THE SETUP
-```docker-compose run --rm tf init
+Command to start the terraform docker container:
+
+```
+docker compose up -d
+```
+The service name is bash and to access the terraform platform we use:
+```
+docker compose exec tf bash
 ```
 
-```docker-compose run --rm tf fmt
+Running terraform commands :
+
+```docker compose run --rm tf init
+```
+
+```docker compose run --rm tf fmt
 ```
 ```docker-compose run --rm tf validate
 ```
@@ -23,4 +35,4 @@ docker-compose run --rm tf plan -var-file=tfvars/dev.tfvars
 
 
 aws configure --profile elcy-dev
-docker run -d -it --name terraform-ubuntu ubuntu 
+docker run -d -it --name terraform-ubuntu ubuntu
