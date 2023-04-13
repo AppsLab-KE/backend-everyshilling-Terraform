@@ -4,6 +4,13 @@ variable "tags" {
   default     = {}
 }
 
+variable "key_name" {
+  description = "Name of the key pair for EC2 instances"
+  type        = string
+  default     = "elcy"
+}
+
+
 variable "vpc_cidr" {
   description = "IP Cidr for the VPC"
   type        = string
