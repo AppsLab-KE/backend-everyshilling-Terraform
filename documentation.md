@@ -30,6 +30,8 @@ nano ~/.aws/config
 ssh-keygen
 cat ./ssh/id_rsa.pub
 
+sudo nano /etc/ssh/sshd_config
+
 
 docker-compose run --rm tf plan -var-file=tfvars/dev.tfvars
 
