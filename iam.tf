@@ -26,3 +26,4 @@ resource "aws_iam_role_policy_attachment" "ecs-instance-role-attachment" {
 resource "aws_iam_instance_profile" "ecs_service_role" {
   role = aws_iam_role.ecs-instance-role.name
 }
+

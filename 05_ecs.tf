@@ -1,23 +1,12 @@
 resource "aws_ecs_cluster" "web-cluster" {
   name               = var.cluster_name
-  capacity_providers = [aws_ecs_capacity_provider.test.name]
+
   tags = {
   project_owner = "Appslab"
   }
 }
 
-resource "aws_ecs_capacity_provider" "test" {
-  name = "capacity-provider-test"
-  auto_scaling_group_provider {
-    auto_scaling_group_arn         = aws_autoscaling_group.asg.arn
-    managed_termination_protection = "ENABLED"
 
-    managed_scaling {
-      status          = "ENABLED"
-      target_capacity = 85
-    }
-  }
-}
 
 # update file container-def, so it's pulling image from ecr
 resource "aws_ecs_task_definition" "task-definition-test" {
