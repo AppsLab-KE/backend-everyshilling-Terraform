@@ -16,3 +16,7 @@ module "vpc" {
     project_owner = "Appslab"
   }
 }
+
+data "aws_vpc" "main" {
+  id = module.vpc.vpc_id
+}

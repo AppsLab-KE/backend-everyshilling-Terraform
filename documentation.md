@@ -40,3 +40,11 @@ aws configure --profile elcy-dev
 docker run -d -it --name terraform-ubuntu ubuntu
 
 ~/.aws/credentials
+
+Terraform init
+
+Terrform plan -var-file=tfvars/dev.tfvars
+-var-file=tfvars/dev.tfvars
+Terraform apply
+
+Terraform destroy -var-file=tfvars/dev.tfvars

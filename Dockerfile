@@ -1,7 +1,9 @@
 FROM ubuntu:20.04
 
 RUN apt-get update \
-  && apt-get install -y curl unzip gnupg software-properties-co wget \
+  && apt-get install unzip \
+  && apt-get install -y curl unzip gnupg software-properties-common wget \
+  && apt-get install -y --no-install-recommends unzip \
   && curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
   && unzip awscliv2.zip \
   && ./aws/install \
@@ -10,6 +12,8 @@ RUN apt-get update \
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
     gpg --dearmor | \
     sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+
 
 
 WORKDIR /home
