@@ -22,8 +22,8 @@ Generating sshkey and storing in the AWS Console key pair
 ssh-keygen
 cat ./ssh/id_rsa.pub
 
-
-
-
-aws configure --profile elcy-dev
 docker run -d -it --name terraform-ubuntu ubuntu
+
+
+Terraform destroy -var-file=tfvars/dev.tfvars
+aws configure --profile elcy-dev
