@@ -5,7 +5,47 @@ I also opted to use Codespace envronment for easy accessiblity and setup of AWS 
 
 A great starting point would be clicking "Use this template button" found on the Repo for your initial setup.
 
-# COMMANDS TO RUN THE SETUP
+
+## How to set up the infrastructure ?
+
+Requirements:
+- AWS Account as user 
+- Terraform configured ( Could use the docker compose to set it up)
+- AWS CLI installed and credentials configured.
+
+ Click the 'Use this Template' button for your intial setup 
+ 
+ 1. terraform init -var-file=tfvars/dev.tfvars
+ 2. terraform plan  -var-file=tfvars/dev.tfvars
+ 3. terraform apply -var-file=tfvars/dev.tfvars
+
+To terminate the infrastructure :
+terraform destroy -var-file=tfvars/dev.tfvars
+
+
+Note: 
+- To generate keys 
+ssh-keygen
+cat ./ssh/id_rsa.pub
+aws configure --profile (set your profile)
+
+- Incase faced with lock state key. [Solution](https://stackoverflow.com/questions/62189825/terraform-error-acquiring-the-state-lock-conditionalcheckfailedexception)
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Others incase of setting up Terraform using Docker compose
+```docker-compose up ```
+
 ```docker-compose run --rm tf init
 ```
 
@@ -15,15 +55,7 @@ A great starting point would be clicking "Use this template button" found on the
 ```docker-compose run --rm tf validate
 ```
 
-I also setup config files for the Terraform AWS Provider
-Generating sshkey and storing in the AWS Console key pair
-- Command to generate ssh key
-```
-ssh-keygen
-cat ./ssh/id_rsa.pub
 
 docker run -d -it --name terraform-ubuntu ubuntu
 
 
-Terraform destroy -var-file=tfvars/dev.tfvars
-aws configure --profile elcy-dev
