@@ -1,6 +1,6 @@
 [
     {
-      "name": "pink-slon",
+      "name": "app-auth",
       "image": "540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-auth",
       "cpu": 10,
       "memory": 256,
@@ -13,7 +13,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group" : "/ecs/frontend-container",
+          "awslogs-group" : "/ecs/container",
           "awslogs-region": "us-east-1"
         }
       }
