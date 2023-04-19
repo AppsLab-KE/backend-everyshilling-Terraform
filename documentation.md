@@ -1,12 +1,11 @@
-## Summary
-For the Infrastructure setup, l decided to use docker images and containers, to avoid directly installing terrafrom on your machine.
+## TO DO TASKS
+- [x] Building and pushing the Docker images to Amazon ECR
+- [x]
+- [x] Deploying the Microservice using Terraform and ECR.
+- [ ] Creating DNS Record for the Application Load Balancer's
+- [ ] Testing the solution.
 
-I also opted to use Codespace envronment for easy accessiblity and setup of AWS credentials.That is generated secret and access keys from my IAM user. I then exported these values in my codespace workspace before running terraform commands.
-
-A great starting point would be clicking "Use this template button" found on the Repo for your initial setup.
-
-
-## How to set up the infrastructure ?
+## Setting up the infrastructure 
 
 Requirements:
 - AWS Account as user 
@@ -30,6 +29,11 @@ cat ./ssh/id_rsa.pub
 aws configure --profile (set your profile)
 
 - Incase faced with lock state key. [Solution](https://stackoverflow.com/questions/62189825/terraform-error-acquiring-the-state-lock-conditionalcheckfailedexception)
+
+
+
+
+
 
 
 
