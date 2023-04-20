@@ -53,15 +53,4 @@ variable "sg_ports" {
   }))
 }
 
-variable "container_definitions" {
-  type = list(object({
-    name  = string
-    image = string
-  }))
-  default = [
-    {
-      name  = "pink-slon"
-      image = "my-image:latest"
-    }
-  ]
-}
+
