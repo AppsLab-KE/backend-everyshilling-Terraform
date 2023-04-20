@@ -7,11 +7,33 @@ resource "aws_ecs_cluster" "web-cluster" {
 }
 
 
-
-# update file container-def, so it's pulling image from ecr
+# updated file container-def, so it's pulling image from ecr
 resource "aws_ecs_task_definition" "task-definition-test" {
   family                = "web-family"
-  container_definitions = file("container-definitions/container-def.json")
+  container_definitions = jsonencode(
+  [
+    {
+      "name": "pink-slon",
+      "image": "540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-auth",
+      "cpu": 10,
+      "memory": 256,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 80
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group" : "/ecs/container",
+          "awslogs-region": "us-east-1"
+        }
+      }
+    }
+])
+  
+
   network_mode          = "bridge"
    tags = {
     project_owner = "Appslab"
@@ -22,7 +44,7 @@ resource "aws_ecs_service" "service" {
   name            = "web-service"
   cluster         = aws_ecs_cluster.web-cluster.id
   task_definition = aws_ecs_task_definition.task-definition-test.arn
-  desired_count   = 10
+  desired_count   = 5
   ordered_placement_strategy {
     type  = "binpack"
     field = "cpu"
@@ -46,3 +68,6 @@ resource "aws_cloudwatch_log_group" "log_group" {
     project_owner = "Appslab"
   }
 }
+
+
+

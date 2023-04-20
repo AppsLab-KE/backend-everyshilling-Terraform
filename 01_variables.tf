@@ -1,3 +1,5 @@
+
+
 variable "tags" {
   description = "The tags to be used for the different resources in the Everyshilling application"
   type        = map(string)
@@ -41,20 +43,6 @@ variable "region" {
   type        = string
 }
 
-variable "ami_id" {
-  description = "Ec2 AMI ID to use"
-  type        = string
-}
-
-variable "ec2_instance_type" {
-  description = "EC2 instance type"
-  type        = string
-}
-
-variable "enable_ec2_monitoring" {
-  description = "Enable EC2 monitoring"
-  type        = bool
-}
 
 variable "sg_ports" {
   description = "Security group ports"
@@ -63,4 +51,17 @@ variable "sg_ports" {
     protocol    = string
     cidr_blocks = list(string)
   }))
+}
+
+variable "container_definitions" {
+  type = list(object({
+    name  = string
+    image = string
+  }))
+  default = [
+    {
+      name  = "pink-slon"
+      image = "my-image:latest"
+    }
+  ]
 }
