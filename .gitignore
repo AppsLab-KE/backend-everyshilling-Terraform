@@ -1,2 +1,5 @@
 .terraform*
 everyshilling
+
+terraform.tfstate
+terraform.tfstate.backup
