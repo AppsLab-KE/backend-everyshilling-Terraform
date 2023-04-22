@@ -21,40 +21,42 @@ Requirements:
 To terminate the infrastructure
 terraform destroy -var-file=tfvars/dev.tfvars
 
+## To set up ansible:
 
-Note:
+Requirements:
+- Python3
+- Ansible
+- AWS-CLI
+
+sudo pip3 install ansible
+sudo apt-get install awscli
+aws configure --profile [your profile name]
+sudo pip3 install boto (Boto Library)
+sudo pip3 install boto3 (EC2plugin)
+ Note; Sometimes ansible --version may return "module not found" SOLUTION: show path and add it to your environment
+  ``` sudo pip3 show ansible ```
+ ``` echo "export PATH=\$PATH:$(dirname $(sudo pip3 show ansible | grep Location | awk '{print $2}'))/bin" >> ~/.bashrc ```
+
+
+
+
+
+
+Other stuff to Note:
 - To generate keys
 ssh-keygen
-cat ./ssh/id_rsa.pub
+cat ~/.ssh/id_rsa.pub
 aws configure --profile (set your profile)
 
 - Incase faced with lock state key. [Solution](https://stackoverflow.com/questions/62189825/terraform-error-acquiring-the-state-lock-conditionalcheckfailedexception)
 
-..........VPC.....
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "3.19.0"
-
-  name = format("elcy-%s", var.tags["environment"])
-  cidr = var.vpc_cidr
-
-  azs             = var.azs
-  private_subnets = var.private_subnets
-  public_subnets  = var.public_subnets
-
-  enable_nat_gateway = true
-  enable_vpn_gateway = false
-
-  tags = {
-    project_owner = "Appslab"
-  }
-}
-
-data "aws_vpc" "main" {
-  id = module.vpc.vpc_id
-}
+To check if ansible setting are being loaded :ansible-config view
 
 
+ansible-inventory -i aws_ec2.yaml
+ansible-inventory -i aws_ec2.yaml --list
+ansible-inventory -i aws_ec2.yaml --graph
+ansible-playbook -i aws-ec2.yaml playbook.yaml
 
 
 
