@@ -1,0 +1,14 @@
+---
+plugin: aws_ec2
+aws_profile: elcy-dev
+regions:
+  - us-east-1
+hostnames:
+  - ip-address
+
+# keyed_groups:
+#   - prefix: aws_ec2
+#     key: placement.availability_zone
+
+groups:
+  test-asg: "'test-asg' in tags.aws:autoscaling:groupName"
