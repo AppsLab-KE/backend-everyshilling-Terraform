@@ -1,5 +1,5 @@
 - name: Ping dynamic inventory
-  hosts: linux
+  hosts: aws_ec2
 
   tasks:
     - name: ping dynamic inventory
