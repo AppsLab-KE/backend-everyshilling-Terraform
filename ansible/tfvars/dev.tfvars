@@ -28,3 +28,4 @@ azs                   =["us-east-1a","us-east-1b", "us-east-1c"]
 ecs_cluster_name      = "everyshilling"
 log-group             = "everyshilling_logs"
 vpc_id                ="everyshilling"
+subnet_id             = ["","",""]
