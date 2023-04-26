@@ -48,10 +48,7 @@ variable "log-group" {
   description = "cloudwatch logs"
   type        = string
 }
-variable "vpc-id" {
-  description = "virtual private id"
-  type        = string
-}
+
 
 
 
