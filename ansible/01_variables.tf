@@ -49,6 +49,9 @@ variable "log-group" {
   type        = string
 }
 
-
+variable "ecs_task_execution_role_name" {
+  description = "iam policy"
+  type        = string
+}
 
 

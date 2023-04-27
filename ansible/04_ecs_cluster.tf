@@ -1,7 +1,7 @@
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
-
   cluster_name = format("everyshilling-%s", var.tags["environment"])
+  
 
 
   fargate_capacity_providers = {
@@ -109,12 +109,10 @@ module "ecs" {
               protocol      = "tcp"
             }
           ]
-
           memory_reservation = 100
         }
 
       }
-      
 
       subnet_ids = ["subnet-03b3e5120c1f25884", "subnet-0a2c845ec2f4508c6", "subnet-0231d3bef9789ded7", "subnet-0d9dceb275616558e","subnet-0acb9880b5f76f8b5","subnet-0b3fd9785f80d31b8"]
       security_group_rules = {
@@ -137,4 +135,19 @@ module "ecs" {
     }
   }
 
+  # iam_task_execution_role_policy = jsonencode({
+  #   Version = "2012-10-17"
+  #   Statement = [
+  #     {
+  #       Action = [
+  #         "ecr:GetAuthorizationToken",
+  #         "ecr:GetDownloadUrlForLayer",
+  #         "ecr:BatchGetImage",
+  #         "ecr:BatchCheckLayerAvailability"
+  #       ]
+  #       Effect = "Allow"
+  #       Resource = "*"
+  #     }
+  #   ]
+  # })
 }
