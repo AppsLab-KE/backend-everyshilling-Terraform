@@ -114,8 +114,9 @@ module "ecs" {
         }
 
       }
+      
 
-      subnet_ids = ["subnet-06e1e9eb5ee7646be", "subnet-0fa081145067c456e", "subnet-052ced4c028671464", "subnet-06e1e9eb5ee7646be"]
+      subnet_ids = ["subnet-03b3e5120c1f25884", "subnet-0a2c845ec2f4508c6", "subnet-0231d3bef9789ded7", "subnet-0d9dceb275616558e","subnet-0acb9880b5f76f8b5","subnet-0b3fd9785f80d31b8"]
       security_group_rules = {
         alb_ingress_3000 = {
           type                     = "ingress"
@@ -123,7 +124,7 @@ module "ecs" {
           to_port                  = 80
           protocol                 = "tcp"
           description              = "Service port"
-          source_security_group_id = "sg-04579f7f77378b216"
+          source_security_group_id = "sg-0a1f0a42a90de09bc"
         }
         egress_all = {
           type        = "egress"
