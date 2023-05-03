@@ -4,6 +4,14 @@ variable "tags" {
   default     = {}
 }
 
+variable "vpc_id" {
+  description = "ID of the VPC to use"
+}
+
+variable "aws_lb" {
+  description = "Load balancer"
+}
+
 variable "vpc_cidr" {
   description = "IP Cidr for the VPC"
   type        = string
@@ -12,7 +20,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "The availability zones for the region"
   type        = list(string)
-  default     = ["us-east-1a", "eu-west-1b", "eu-west-1c"]
+  default     = ["us-east-1a", "us-east-1b", "eu-west-1c"]
 }
 
 variable "private_subnets" {
@@ -39,19 +47,19 @@ variable "sg_ports" {
   }))
 }
 
-variable "ecs_cluster_name" {
-  description = "ecs cluster"
-  type        = string
-}
+# variable "ecs_cluster_name" {
+#   description = "ecs cluster"
+#   type        = string
+# }
 
-variable "log-group" {
-  description = "cloudwatch logs"
-  type        = string
-}
+# variable "log-group" {
+#   description = "cloudwatch logs"
+#   type        = string
+# }
 
-variable "ecs_task_execution_role_name" {
-  description = "iam policy"
-  type        = string
-}
+# variable "ecs_task_execution_role_name" {
+#   description = "iam policy"
+#   type        = string
+# }
 
 
