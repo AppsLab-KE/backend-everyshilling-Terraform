@@ -10,10 +10,6 @@ variable "key_name" {
   default     = "elcy"
 }
 
-variable "cluster_name" {
-  type        = string
-  description = "The name of AWS ECS cluster"
-}
 
 variable "vpc_cidr" {
   description = "IP Cidr for the VPC"
@@ -35,6 +31,12 @@ variable "public_subnets" {
   description = "VPC public subnets"
   type        = list(string)
 }
+
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = list(string)
+}
+
 
 variable "region" {
   description = "AWS region"

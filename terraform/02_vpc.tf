@@ -4,6 +4,7 @@ module "vpc" {
 
   name = format("everyshilling-%s", var.tags["environment"])
   cidr = var.vpc_cidr
+ 
 
   azs             = var.azs
   private_subnets = var.private_subnets
@@ -13,10 +14,11 @@ module "vpc" {
   enable_vpn_gateway = false
 
   tags = {
-    project_owner = "Apps Lab"
+    project_owner = "AppsLab"
   }
 }
 
 data "aws_vpc" "main" {
   id = module.vpc.vpc_id
 }
+

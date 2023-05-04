@@ -18,19 +18,13 @@ sg_ports = {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-<<<<<<< HEAD
-   https = {
-=======
   tcp = {
->>>>>>> 8c34fb898565b7afafdf4d8e86df1bc3f9cefe17
+
     port        = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-<<<<<<< HEAD
 
-=======
->>>>>>> 8c34fb898565b7afafdf4d8e86df1bc3f9cefe17
 }
 
 vpc_cidr              = "10.0.0.0/16"
@@ -41,3 +35,4 @@ ami_id                = "ami-007855ac798b5175e"
 key_name              = "elcy-dev"
 ec2_instance_type     = "t2.medium"
 enable_ec2_monitoring = false
+vpc_id                = "vpc-0af6550170a2ff128"
