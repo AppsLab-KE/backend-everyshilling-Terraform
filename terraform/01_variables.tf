@@ -1,15 +1,18 @@
 variable "tags" {
-  description = "The tags to be used for the different resources in the Elcy project"
+  description = "The tags to be used for the different resources in the Everyshilling application"
   type        = map(string)
   default     = {}
 }
 
-variable "vpc_id" {
-  description = "ID of the VPC to use"
+variable "key_name" {
+  description = "Name of the key pair for EC2 instances"
+  type        = string
+  default     = "elcy"
 }
 
-variable "aws_lb" {
-  description = "Load balancer"
+variable "cluster_name" {
+  type        = string
+  description = "The name of AWS ECS cluster"
 }
 
 variable "vpc_cidr" {

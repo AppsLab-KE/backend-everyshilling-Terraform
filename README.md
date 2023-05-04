@@ -48,4 +48,3 @@
 | <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | n/a |
 | <a name="output_vpc_cidr"></a> [vpc\_cidr](#output\_vpc\_cidr) | n/a |
 
-## NOTE ADDITIONAL STEPS ARE INCLUDED IN THE documentation.md file
