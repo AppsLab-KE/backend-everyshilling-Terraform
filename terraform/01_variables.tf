@@ -10,10 +10,6 @@ variable "key_name" {
   default     = "elcy"
 }
 
-variable "cluster_name" {
-  type        = string
-  description = "The name of AWS ECS cluster"
-}
 
 variable "vpc_cidr" {
   description = "IP Cidr for the VPC"
@@ -23,7 +19,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "The availability zones for the region"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  default     = ["us-east-1a", "us-east-1b", "eu-west-1c"]
 }
 
 variable "private_subnets" {
@@ -36,24 +32,15 @@ variable "public_subnets" {
   type        = list(string)
 }
 
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = list(string)
+}
+
+
 variable "region" {
   description = "AWS region"
   type        = string
-}
-
-variable "ami_id" {
-  description = "Ec2 AMI ID to use"
-  type        = string
-}
-
-variable "ec2_instance_type" {
-  description = "EC2 instance type"
-  type        = string
-}
-
-variable "enable_ec2_monitoring" {
-  description = "Enable EC2 monitoring"
-  type        = bool
 }
 
 variable "sg_ports" {
@@ -64,3 +51,20 @@ variable "sg_ports" {
     cidr_blocks = list(string)
   }))
 }
+
+# variable "ecs_cluster_name" {
+#   description = "ecs cluster"
+#   type        = string
+# }
+
+# variable "log-group" {
+#   description = "cloudwatch logs"
+#   type        = string
+# }
+
+# variable "ecs_task_execution_role_name" {
+#   description = "iam policy"
+#   type        = string
+# }
+
+

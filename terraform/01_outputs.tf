@@ -18,7 +18,3 @@ output "public_subnets" {
 output "igw_id" {
   value = module.vpc.igw_id
 }
-
-output "alb_dns" {
-  value = aws_lb.test-lb.dns_name
-}
