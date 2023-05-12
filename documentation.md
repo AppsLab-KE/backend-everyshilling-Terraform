@@ -1,9 +1,11 @@
 ## TO DO TASKS
 - [x] Building and pushing the Docker images to Amazon ECR
-- [x]
-- [x] Deploying the Microservice using Terraform and ECR.
-- [ ] Creating DNS Record for the Application Load Balancer's
-- [ ] Testing the solution.
+- [x]Setting up infrastructure
+- [x] Setting up pipeline
+- [ ] Creating DNS Record for the  Load Balancer's
+- [x] Testing the solution.
+- [ ] Setting up ssl security
+- [] Monitoring and tracing
 
 Architectural Sample for the Docker swarm
 ![Docker swarm](C:\Users\Administrator\backend-everyshilling-Terraform\templates\Capture1.JPG)
