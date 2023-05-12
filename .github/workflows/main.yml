@@ -1,74 +1,47 @@
-name: 'Terraform'
-
+name: Build and Deploy Docker Images
 on:
-  push:
-    branches:
-    - main
   pull_request:
-
+    branches:
+      - main
 jobs:
-  terraform:
-    name: 'Terraform'
+  build_and_deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Terraform Init
-      id: init
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: terraform init
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Terraform fmt
-      id: fmt
-      run: terraform fmt -check
-      continue-on-error: true
+      - name: Build Docker images
+        run: |
+          make build-dev
 
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -lock=false -var-file=tfvars/dev.tfvars
+      - name: Tagging Docker images
+        run: |
+          docker tag everyshilling_app-auth:latest 540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-auth
+          docker tag everyshilling_app-db:latest 540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-db
+          docker tag everyshilling_app-otp:latest 540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-otp
 
-    - name: Terraform Plan
-      id: plan
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: terraform plan  -var="key_name=elcy-dev" -var="cluster_name=ecs_cluster"
-      continue-on-error: true
+          # Tag your Docker image with the ECR repository URL and image tag
 
-    - uses: actions/github-script@v2
-      name: Runs only on pull request
-      if: github.event_name == 'pull_request'
-      env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-      with:
-        github-token: ${{ secrets.MY_GITHUB_TOKEN }}
-        script: |
-          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-          #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
-          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+      - name: Push Docker images to ECR
+        run: |
+          docker push 540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-auth
+          docker push 540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-db
+          docker push 540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:app-otp
+          # Push the Docker image to ECR
 
-          <details><summary>Show Plan</summary>
-
-          \`\`\`${process.env.PLAN}\`\`\`
-
-          </details>
-
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`,  Workflow: \`${{ github.workflow }}\`*`;
-
-          github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: output
-          })
-
-    # - name: Terraform Apply
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    #   run: terraform apply -auto-approve
+# everyshilling is the stack name
+      - name: Deploy Docker stack
+        run: |
+          docker stack deploy -c compose.yml everyshilling

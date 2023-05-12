@@ -1,0 +1,27 @@
+---
+- name: Create Docker Swarm Cluster
+  hosts: masters
+  become: true
+  tasks:
+    - name: Initialize Docker Swarm on Manager Node
+      shell: docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}
+      register: swarm_init
+      changed_when: "'already initialized' not in swarm_init.stdout"
+    - name: Retrieve Swarm Join Token
+      shell: docker swarm join-token -q worker
+      register: swarm_token
+      changed_when: false
+    - name: Retrieve Manager Join Command
+      shell: docker swarm join-token -q manager
+      register: manager_token
+      changed_when: false
+    - name: Save Join Token and Manager Join Command
+      set_fact:
+        swarm_join_token: "{{ swarm_token.stdout }}"
+        swarm_manager_token: "{{ manager_token.stdout }}"
+    - name: Display Join Token and Manager Join Command
+      debug:
+        msg: >
+          Swarm Join Token: {{ swarm_join_token }}
+
+          Manager Join Command: docker swarm join --token {{ swarm_manager_token }} {{ ansible_default_ipv4.address }}:2377
