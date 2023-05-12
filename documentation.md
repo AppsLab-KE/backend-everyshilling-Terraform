@@ -9,6 +9,7 @@
 - [x] Setting up  CICD pipeline
 - [x] Ensuring all the services are up and running (deployment)
 - [x] Testing the services.
+-  Scheduling instances
 -  Creating DNS Record for the  Load Balancer's
 - Setting up ssl security
 - Monitoring and tracing
