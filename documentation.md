@@ -7,8 +7,8 @@
 - [x] Building and pushing the Docker images to Amazon ECR
 - [x] Setting up Infrastructure
 - [x] Setting up  CICD pipeline
-- [x] Ensuring all the services are up and running
-- [x] Testing the solution.
+- [x] Ensuring all the services are up and running (deployment)
+- [x] Testing the services.
 -  Creating DNS Record for the  Load Balancer's
 - Setting up ssl security
 - Monitoring and tracing
