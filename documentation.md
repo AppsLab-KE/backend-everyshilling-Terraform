@@ -1,6 +1,6 @@
 # Architectural Sample for the Docker swarm
 
-![Docker swarm](backend-everyshilling-Terraform/blob/swarm/templates/Capture1.JPG)
+![Docker swarm](templates/Capture1.JPG)
 
 
 ## TO DO TASKS
