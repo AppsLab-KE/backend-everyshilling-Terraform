@@ -1,24 +1,61 @@
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "3.19.0"
 
-  name = format("everyshilling-%s", var.tags["environment"])
-  cidr = var.vpc_cidr
- 
+# resource "aws_vpc" "main" {
+#   cidr_block           = "10.95.0.0/16"
+#   enable_dns_hostnames = true
+# }
 
-  azs             = var.azs
-  private_subnets = var.private_subnets
-  public_subnets  = var.public_subnets
+# resource "aws_internet_gateway" "main" {
+#   vpc_id = aws_vpc.main.id
+# }
 
-  enable_nat_gateway = true
-  enable_vpn_gateway = false
+# resource "aws_route" "internet_access" {
+#   route_table_id         = aws_vpc.main.main_route_table_id
+#   destination_cidr_block = "0.0.0.0/0"
+#   gateway_id             = aws_internet_gateway.main.id
+# }
 
-  tags = {
-    project_owner = "AppsLab"
-  }
+# resource "aws_security_group" "exposed" {
+#   name   = "exposed"
+#   vpc_id = aws_vpc.main.id
+
+#   ingress {
+#     from_port   = 22
+#     to_port     = 22
+#     protocol    = "tcp"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+
+#   ingress {
+#     from_port   = 80
+#     to_port     = 80
+#     protocol    = "tcp"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+
+#   ingress {
+#     from_port   = 443
+#     to_port     = 443
+#     protocol    = "tcp"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+# }
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.0.0.0/16"
+  # Add other VPC configurations if needed
 }
 
-data "aws_vpc" "main" {
-  id = module.vpc.vpc_id
-}
+# resource "aws_internet_gateway" "my_gateway" {
+#   vpc_id = "vpc-0f334f8fe6d854700"  # Replace with the ID of your VPC
+
+#   tags = {
+#     Name = "MyInternetGateway"
+#   }
+# }
 
