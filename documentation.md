@@ -1,17 +1,17 @@
 # Architectural Sample for the Docker swarm
 
-![Docker swarm](/swarm/templates/Capture1.JPG)
+![Docker swarm](backend-everyshilling-Terraform/blob/swarm/templates/Capture1.JPG)
 
 
 ## TO DO TASKS
 - [x] Building and pushing the Docker images to Amazon ECR
-- [x]Setting up infrastructure
-- [x] Setting up pipeline
+- [x] Setting up Infrastructure
+- [x] Setting up  CICD pipeline
 - [x] Ensuring all the services are up and running
 - [x] Testing the solution.
-- [ ] Creating DNS Record for the  Load Balancer's
-- [] Setting up ssl security
-- [] Monitoring and tracing
+-  Creating DNS Record for the  Load Balancer's
+- Setting up ssl security
+- Monitoring and tracing
 
 ## Setting up the infrastructure
 
@@ -37,13 +37,15 @@ The shell script install_dockercompose.sh installs docker and docker compose in 
 
 ## Configuration Management
 
-Ansible script responsible for creating the swarm cluster (a  manager and two worker node)
+Ansible script responsible for creating the swarm cluster (a manager and two worker node)
 
 The inventory/hosts directory should be changed to the ec2 instances ip addresses to enable ssh.
 
  Playbook command:
 
- ```ansible-playbook -i inventory/hosts playbook.yml ```
+ ```
+ ansible-playbook -i inventory/hosts playbook.yml
+ ```
 
 ## PIPELINES
 .github workflow file is responsible for the autodeployment
