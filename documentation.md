@@ -1,14 +1,17 @@
+# Architectural Sample for the Docker swarm
+
+![Docker swarm](/swarm/templates/Capture1.JPG)
+
+
 ## TO DO TASKS
 - [x] Building and pushing the Docker images to Amazon ECR
 - [x]Setting up infrastructure
 - [x] Setting up pipeline
-- [ ] Creating DNS Record for the  Load Balancer's
+- [x] Ensuring all the services are up and running
 - [x] Testing the solution.
-- [ ] Setting up ssl security
+- [ ] Creating DNS Record for the  Load Balancer's
+- [] Setting up ssl security
 - [] Monitoring and tracing
-
-Architectural Sample for the Docker swarm
-![Docker swarm](C:\Users\Administrator\backend-everyshilling-Terraform\templates\Capture1.JPG)
 
 ## Setting up the infrastructure
 
