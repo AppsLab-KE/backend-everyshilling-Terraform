@@ -5,15 +5,52 @@
 - [ ] Creating DNS Record for the Application Load Balancer's
 - [ ] Testing the solution.
 
-## Setting up the infrastructure 
+Architectural Sample for the Docker swarm
+![Docker swarm](C:\Users\Administrator\backend-everyshilling-Terraform\templates\Capture1.JPG)
+
+## Setting up the infrastructure
 
 Requirements:
-- AWS Account as user 
-- Terraform configured ( Could use the docker compose to set it up)
+- AWS Account as user
+- Terraform configured ( Could use the docker compose file to set it up)
 - AWS CLI installed and credentials configured.
+- Ansible setup
 
- Click the 'Use this Template' button for your intial setup 
- 
+ Click the 'Use this Template' button for your initial setup
+
+ To run the terraform files
+ ```
+terraform init
+ ```
+To set the resources to be provisioned use
+``` terraform plan  -var-file=tfvars/dev.tfvars ```
+ &&
+``` terraform apply -var-file=tfvars/dev.tfvars ```
+
+Doing terraform apply provisions the Docker Swarm resources, VPC with 3 instances (Worker and master)
+The shell script install_dockercompose.sh installs docker and docker compose in your servers.
+
+## Configuration Management
+
+Ansible script responsible for creating the swarm cluster (a  manager and two worker node)
+
+The inventory/hosts directory should be changed to the ec2 instances ip addresses to enable ssh.
+
+ Playbook command:
+
+ ```ansible-playbook -i inventory/hosts playbook.yml ```
+
+## PIPELINES
+.github workflow file is responsible for the autodeployment
+- Once a PR is made , it builds images from the Makefile
+- logins in to AWS ECR
+- the build images are tagged and pushed to ecr
+- then it deploys the docker stack
+
+
+
+### AOB:
+
  1. terraform init -var-file=tfvars/dev.tfvars
  2. terraform plan  -var-file=tfvars/dev.tfvars
  3. terraform apply -var-file=tfvars/dev.tfvars
@@ -22,8 +59,8 @@ To terminate the infrastructure :
 terraform destroy -var-file=tfvars/dev.tfvars
 
 
-Note: 
-- To generate keys 
+Note:
+- To generate keys
 ssh-keygen
 cat ./ssh/id_rsa.pub
 aws configure --profile (set your profile)
