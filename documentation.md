@@ -9,7 +9,9 @@ Requirements:
 - Ansible setup
 
 
-## TO DO TASKS
+## SETUP
+TO DO TASKS
+
 - [x] Building and pushing the Docker images to Amazon ECR
 - [x]Setting up infrastructure
 - [x] Setting up pipeline
@@ -19,8 +21,8 @@ Requirements:
 - [] Setting up ssl security
 - [] Monitoring and tracing
 
-
  Click the 'Use this Template' button for your initial setup
+
 
 ## Setting up the infrastructure
 
@@ -34,13 +36,14 @@ Make the file terraform_script.sh file executable ('chmod +x terraform_script.sh
 
  This provisions the infrastructure for the first time,and from the output copy those ip addresses key to the hosts file under inventoy directory.![inventory]()
 
- Once all the configurations is set,run the terraform script again ```./terraform_script.sh ``` then the command
+
+ Once all the configurations is set,run the terraform script again ```./terraform_script.sh ``` then this command from the ansible playbook which deploys the cluster
 
  ```
 ansible-playbook -i inventory/hosts playbook.yml
  ```
 
-The swarm cluster should now be ready.To chck the cluster using ssh in manager node
+The swarm cluster should now be ready.To chck the cluster using ssh in manager node:
 
 ```
 ssh -i your_key_file.pem ubuntu@manager_public_ip
