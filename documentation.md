@@ -2,6 +2,12 @@
 
 ![Docker swarm](/swarm/templates/Capture1.JPG)
 
+Requirements:
+- AWS Account as user
+- Terraform configured ( Could use the docker compose file to set it up)
+- AWS CLI installed and credentials configured.
+- Ansible setup
+
 
 ## TO DO TASKS
 - [x] Building and pushing the Docker images to Amazon ECR
@@ -13,15 +19,37 @@
 - [] Setting up ssl security
 - [] Monitoring and tracing
 
-## Setting up the infrastructure
-
-Requirements:
-- AWS Account as user
-- Terraform configured ( Could use the docker compose file to set it up)
-- AWS CLI installed and credentials configured.
-- Ansible setup
 
  Click the 'Use this Template' button for your initial setup
+
+## Setting up the infrastructure
+
+### To run all the Terraform commands at once
+
+Make the file terraform_script.sh file executable ('chmod +x terraform_script.sh') and execute it by running:
+
+```
+./terraform_script.sh
+```
+
+ This provisions the infrastructure for the first time,and from the output copy those ip addresses key to the hosts file under inventoy directory.![inventory]()
+
+ Once all the configurations is set,run the terraform script again ```./terraform_script.sh ``` then the command
+
+ ```
+ansible-playbook -i inventory/hosts playbook.yml
+ ```
+
+The swarm cluster should now be ready.To chck the cluster using ssh in manager node
+
+```
+ssh -i your_key_file.pem ubuntu@manager_public_ip
+sudo docker node ls`
+
+```
+
+
+### BLABLABLA
 
  To run the terraform files
  ```
@@ -45,20 +73,13 @@ The inventory/hosts directory should be changed to the ec2 instances ip addresse
 
  ```ansible-playbook -i inventory/hosts playbook.yml ```
 
-## PIPELINES
-.github workflow file is responsible for the autodeployment
-- Once a PR is made , it builds images from the Makefile
-- logins in to AWS ECR
-- the build images are tagged and pushed to ecr
-- then it deploys the docker stack
-
 
 
 ### AOB:
 
- 1. terraform init -var-file=tfvars/dev.tfvars
+ 1. terraform init
  2. terraform plan  -var-file=tfvars/dev.tfvars
- 3. terraform apply -var-file=tfvars/dev.tfvars
+ 3. terraform apply -var-file=tfvars/dev.tfvar
 
 To terminate the infrastructure :
 terraform destroy -var-file=tfvars/dev.tfvars
@@ -71,6 +92,7 @@ cat ./ssh/id_rsa.pub
 aws configure --profile (set your profile)
 
 - Incase faced with lock state key. [Solution](https://stackoverflow.com/questions/62189825/terraform-error-acquiring-the-state-lock-conditionalcheckfailedexception)
+
 
 
 
