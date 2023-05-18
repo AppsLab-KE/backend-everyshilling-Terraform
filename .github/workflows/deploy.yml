@@ -36,12 +36,10 @@ jobs:
         
       - name: List directory contents
         run: ls -la
-
-      - name: Terraform Workspace Select
-        run: terraform workspace new dev
         
-      - name: Terraform Apply
+      - name: Terraform 
         run: |
+          terraform workspace new dev
           cd terraform
           terraform init
           terraform apply -var-file=tfvars/dev.tfvars
