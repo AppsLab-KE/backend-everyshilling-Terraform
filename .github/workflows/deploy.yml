@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Terraform Script
         run: |
-    
+          terraform/terraform_script_unix.sh
           chmod +x terraform_script_unix.sh
           ./terraform_script_unix.sh
 
