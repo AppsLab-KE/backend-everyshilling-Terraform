@@ -42,7 +42,7 @@ jobs:
           terraform workspace new dev
           cd terraform
           terraform init
-          terraform apply -var-file=tfvars/dev.tfvars
+          terraform apply -auto-approve -var-file=tfvars/dev.tfvars
 
       - name: Get Swarm Manager IP
         id: get-manager-ip
