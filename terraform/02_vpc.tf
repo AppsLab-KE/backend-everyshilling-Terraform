@@ -48,14 +48,25 @@
 # }
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
-  # Add other VPC configurations if needed
+  instance_tenancy = "default"
 }
 
-# resource "aws_internet_gateway" "my_gateway" {
-#   vpc_id = "vpc-0f334f8fe6d854700"  # Replace with the ID of your VPC
+resource "aws_route_table" "my_route_table" {
+  vpc_id = aws_vpc.my_vpc.id
+}
 
-#   tags = {
-#     Name = "MyInternetGateway"
-#   }
-# }
+resource "aws_network_acl" "my_network_acl" {
+  vpc_id = aws_vpc.my_vpc.id
+}
+
+resource "aws_network_acl_rule" "ssh_ingress_rule" {
+  network_acl_id = aws_network_acl.my_network_acl.id
+  rule_number    = 100
+  protocol       = "6"  # TCP
+  rule_action    = "allow"
+  egress         = false
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 22
+  to_port        = 22
+}
 

@@ -26,3 +26,11 @@ variable "tags" {
 variable "my_vpc" {
   description = "vpc creation "
 }
+
+variable "my_internet_gateway" {
+  description = "internet gateway used in vpc"
+}
+
+variable "nat_gateway_route" {
+  description = "NAT gateway value"
+}
