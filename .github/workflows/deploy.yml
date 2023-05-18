@@ -50,18 +50,16 @@ jobs:
           swarm_manager_ip=$(terraform output -raw swarm_manager_ip)
           echo "::set-output name=manager-ip::$swarm_manager_ip"
 
-      - name: Get Swarm Worker IP
-        id: get-worker-ip
-        run: |
-          swarm_worker_ip=$(terraform output -raw swarm_worker_ip)
-          echo "::set-output name=worker-ip::$swarm_worker_ip"
-
       - name: Initialize Docker Swarm
         run: ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm init --advertise-addr ${{ steps.get-manager-ip.outputs.manager-ip }}"
 
-      - name: Deploy Swarm
+      - name: Get Swarm Worker IP
+        id: get-worker-ip
         run: |
-          ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm init --advertise-addr ${{
-          steps.get-manager-ip.outputs.manager-ip }}"
-          ssh ubuntu@${{ steps.get-worker-ip.outputs.worker-ip }} "docker swarm join --token <SWARM_TOKEN> ${{
-          steps.get-manager-ip.outputs.manager-ip }}:2377"
+              swarm_worker_ip=$(terraform output -raw swarm_worker_ip)
+              echo "::set-output name=worker-ip::$swarm_worker_ip"
+
+      - name: Join Swarm Worker
+        run: |
+         ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm join-token worker | grep token"
+         ssh ubuntu@${{ steps.get-worker-ip.outputs.worker-ip }} "docker swarm join --token <worker_token> ${{ steps.get-manager-ip.outputs.manager-ip }}"
