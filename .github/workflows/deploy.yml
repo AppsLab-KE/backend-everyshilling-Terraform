@@ -18,29 +18,26 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: <AWS_REGION>
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform-version: 4.62.0
+          terraform-version: <TERRAFORM_VERSION>
 
-      - name: Install SSH client
-        run: sudo apt-get update && sudo apt-get install -y openssh-client
+      - name: Terraform Init
+        run: terraform init
 
-      - name: Run Terraform Script
-        run: |
-          terraform/terraform_script_unix.sh
-          chmod +x terraform/terraform_script_unix.sh
-          terraform/terraform_script_unix.sh
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
 
       - name: Get Swarm Manager IP
         id: get-manager-ip
-        run: echo "::set-output name=manager-ip::$(cat manager_ip.txt)"
+        run: echo "::set-output name=manager-ip::$(terraform output -json swarm_manager_ip | jq -r)"
 
       - name: Get Worker IP
         id: get-worker-ip
-        run: echo "::set-output name=worker-ip::$(cat worker_ip.txt)"
+        run: echo "::set-output name=worker-ip::$(terraform output -json swarm_worker_ip | jq -r)"
 
       - name: Deploy Swarm
         run: |
