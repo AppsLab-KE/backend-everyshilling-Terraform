@@ -19,6 +19,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+          profile-name: elcy-dev
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
@@ -28,7 +29,9 @@ jobs:
       - name: List directory contents
         run: ls -la
 
-
+      - name: Terraform Workspace Select
+        run: terraform workspace new dev
+        
       - name: Terraform Apply
         run: |
           cd terraform
