@@ -24,9 +24,6 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform-version: 4.62.0
-
-      - name: Terraform Init
-        run: terraform init
         
       - name: List directory contents
         run: ls -la
@@ -35,6 +32,7 @@ jobs:
       - name: Terraform Apply
         run: |
           cd terraform
+          terraform init
           terraform apply -var-file=tfvars/dev.tfvars
 
       - name: Get Swarm Manager IP
