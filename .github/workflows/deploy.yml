@@ -27,10 +27,14 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        
+      - name: List directory contents
+        run: ls -la
+
 
       - name: Terraform Apply
         run: |
-          cd backend-everyshilling-Terraform/terraform
+          cd terraform
           terraform apply -var-file=tfvars/dev.tfvars
 
       - name: Get Swarm Manager IP
