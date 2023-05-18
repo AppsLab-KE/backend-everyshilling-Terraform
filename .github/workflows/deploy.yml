@@ -66,10 +66,7 @@ jobs:
           echo "::set-output name=manager-ip::$swarm_manager_ip"
 
       - name: Initialize Docker Swarm
-        run: |
-         ssh ubuntu@$IP_ADDRESS "docker swarm init --advertise-addr $IP_ADDRESS"
-        env:
-          IP_ADDRESS: ${{ steps.get-manager-ip.outputs.manager-ip }}
+        run: ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm init --advertise-addr ${{ steps.get-manager-ip.outputs.manager-ip }}"
     
       - name: Get Swarm Worker IP
         id: get-worker-ip
