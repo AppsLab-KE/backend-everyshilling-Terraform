@@ -28,7 +28,6 @@ jobs:
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region us-east-1
 
-
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -37,11 +36,27 @@ jobs:
       - name: List directory contents
         run: ls -la
         
-      - name: Terraform 
+      - name: Terraform Init
         run: |
-          terraform workspace new dev
           cd terraform
           terraform init
+
+      - name: Terraform Workspace
+        id: workspace
+        run: |
+          cd terraform
+          terraform workspace select dev || terraform workspace new dev
+
+      - name: Terraform Refresh
+        if: steps.workspace.outputs.changed == 'true'
+        run: |
+          cd terraform
+          terraform refresh -var-file=tfvars/dev.tfvars
+
+      - name: Terraform Apply
+        if: steps.workspace.outputs.changed != 'true'
+        run: |
+          cd terraform
           terraform apply -auto-approve -var-file=tfvars/dev.tfvars
 
       - name: Get Swarm Manager IP
@@ -56,10 +71,10 @@ jobs:
       - name: Get Swarm Worker IP
         id: get-worker-ip
         run: |
-              swarm_worker_ip=$(terraform output -raw swarm_worker_ip)
-              echo "::set-output name=worker-ip::$swarm_worker_ip"
+          swarm_worker_ip=$(terraform output -raw swarm_worker_ip)
+          echo "::set-output name=worker-ip::$swarm_worker_ip"
 
       - name: Join Swarm Worker
         run: |
-         ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm join-token worker | grep token"
-         ssh ubuntu@${{ steps.get-worker-ip.outputs.worker-ip }} "docker swarm join --token <worker_token> ${{ steps.get-manager-ip.outputs.manager-ip }}"
+          ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm join-token worker | grep token"
+          ssh ubuntu@${{ steps.get-worker-ip.outputs.worker-ip }} "docker swarm join --token <worker_token> ${{ steps.get-manager-ip.outputs.manager-ip }}"
