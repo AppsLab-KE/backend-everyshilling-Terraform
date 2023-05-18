@@ -46,11 +46,18 @@ jobs:
 
       - name: Get Swarm Manager IP
         id: get-manager-ip
-        run: echo "::set-output name=manager-ip::$(terraform output -json swarm_manager_ip | jq -r)"
+        run: |
+          swarm_manager_ip=$(terraform output -raw swarm_manager_ip)
+          echo "::set-output name=manager-ip::$swarm_manager_ip"
 
-      - name: Get Worker IP
+      - name: Get Swarm Worker IP
         id: get-worker-ip
-        run: echo "::set-output name=worker-ip::$(terraform output -json swarm_worker_ip | jq -r)"
+        run: |
+          swarm_worker_ip=$(terraform output -raw swarm_worker_ip)
+          echo "::set-output name=worker-ip::$swarm_worker_ip"
+
+      - name: Initialize Docker Swarm
+        run: ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm init --advertise-addr ${{ steps.get-manager-ip.outputs.manager-ip }}"
 
       - name: Deploy Swarm
         run: |
