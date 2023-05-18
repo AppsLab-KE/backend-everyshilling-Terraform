@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Terraform Script
         run: |
-          cd backend-everyshilling-Terraform/terraform
+    
           chmod +x terraform_script_unix.sh
           ./terraform_script_unix.sh
 
