@@ -1,10 +1,3 @@
-540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:redis
-
-540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:prism
-
-
-540828511394.dkr.ecr.us-east-1.amazonaws.com/twala:postgres -5432
-
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
   cluster_name = format("everyshilling-%s", var.tags["environment"])
