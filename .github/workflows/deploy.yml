@@ -65,10 +65,6 @@ jobs:
         run: |
           echo "::set-output name=master_public_ip::$(terraform output master_public_ip)"
 
-#       - name: Get EC2 instance worker IP address
-#         id: worker1_public_ip
-#         run: |
-#           echo "::set-output name=worker1_public_ip::$(terraform output -raw worker1_public_ip)"
 
       - name: Get private IP from Terraform output
         id: get-private-ip
@@ -93,17 +89,20 @@ jobs:
         run: |
           echo "::set-output name=worker1_public_ip::$(terraform output worker1_public_ip)"
 
-      - name: SSH into worker EC2 instance 
+      - name: SSH into EC2 instance and Initialize Docker swarm
         uses: appleboy/ssh-action@master
         with:
-            host: ${{ steps.worker1_public_ip.outputs.worker1_public_ip }}:22
-            username: ubuntu
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            script: |
-              echo "Connected to EC2 instance"
-              sudo su
-              cd ~
-              docker swarm join --token <worker_token> ${{ steps.master_public_ip.outputs.master_public_ip }}:22
+          host: ${{ steps.master_public_ip.outputs.master_public_ip }}:22
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "Connected to EC2 instance"
+            sudo su
+            cd ~
+            private_ip=$(terraform output master_private_ip)
+            sudo docker swarm init --advertise-addr "$private_ip:2377"
+            sudo docker swarm join-token worker | grep token
 
 
 
