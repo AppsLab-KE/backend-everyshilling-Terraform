@@ -77,7 +77,7 @@ jobs:
       - name: SSH into EC2 instance and Intiliaze docke swarm
         uses: appleboy/ssh-action@master
         with:
-            host: ${{ steps.master_public_ip.outputs.master_public_ip }}
+            host: ${{ steps.master_public_ip.outputs.master_public_ip }}:22
             username: ubuntu
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
@@ -95,7 +95,7 @@ jobs:
       - name: SSH into worker EC2 instance 
         uses: appleboy/ssh-action@master
         with:
-            host: ${{ steps.worker1_public_ip.outputs.worker1_public_ip }}
+            host: ${{ steps.worker1_public_ip.outputs.worker1_public_ip }}:22
             username: ubuntu
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
