@@ -34,3 +34,8 @@ variable "my_internet_gateway" {
 variable "nat_gateway_route" {
   description = "NAT gateway value"
 }
+
+
+variable "subnets_cidr" {
+  description = "vpc subnets cidr"
+}

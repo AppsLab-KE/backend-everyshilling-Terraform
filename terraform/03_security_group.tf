@@ -1,8 +1,8 @@
-resource "aws_subnet" "my_subnet" {
-  vpc_id                  = aws_vpc.my_vpc.id
-  cidr_block              = "10.0.1.0/24"  # Specify the desired CIDR block for your subnet
-  availability_zone       = "us-east-1a"   # Specify the desired availability zone
-}
+# resource "aws_subnet" "my_subnet" {
+#   vpc_id                  = aws_vpc.my_vpc.id
+#   cidr_block              = "10.0.1.0/24"  # Specify the desired CIDR block for your subnet
+#   availability_zone       = "us-east-1a"   # Specify the desired availability zone
+# }
 
 resource "aws_security_group" "my_security_group" {
   vpc_id = aws_vpc.my_vpc.id
