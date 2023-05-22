@@ -81,6 +81,7 @@ jobs:
             echo "Connected to EC2 instance"
             sudo su
             cd ~
+            private_ip=$(terraform output master_private_ip)
             sudo docker swarm init --advertise-addr "${{ steps.get-private-ip.outputs.master_private_ip }}:2377":22
             sudo docker swarm join-token worker | grep token
 
