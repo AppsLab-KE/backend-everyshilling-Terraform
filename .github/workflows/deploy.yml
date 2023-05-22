@@ -1,5 +1,6 @@
 name: Deploy Swarm Cluster
 
+
 on:
   push:
     branches:
@@ -27,11 +28,11 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region us-east-1
-
+          
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform-version: 4.62.0
+          terraform-version: 1.0.0
         
       - name: List directory contents
         run: ls -la
@@ -40,50 +41,46 @@ jobs:
         run: |
           cd terraform
           terraform init
-
+          
       - name: Terraform Workspace
         id: workspace
         run: |
           cd terraform
           terraform workspace select dev || terraform workspace new dev
-
+          
       - name: Terraform Refresh
         if: steps.workspace.outputs.changed == 'true'
         run: |
           cd terraform
           terraform refresh -var-file=tfvars/dev.tfvars
-
+          
       - name: Terraform Apply
         if: steps.workspace.outputs.changed != 'true'
         run: |
           cd terraform
           terraform apply -auto-approve -var-file=tfvars/dev.tfvars
           
-      - name: Get EC2 instance manager ip addresses
+      - name: Get EC2 instance manager IP address
         id: master_public_ip
-        run: echo "::set-output name=ips::$(terraform output -raw master_public_ip)"
-
-      - name: Get EC2 instance worker ip addresses
+        run: |
+          echo "::set-output name=master-ip::$(terraform output -raw master_public_ip)"
+          
+      - name: Get EC2 instance worker IP address
         id: worker1_public_ip
-        run: echo "::set-output name=ips::$(terraform output -raw worker1_public_ip)"
-
-#       - name: Get Swarm Manager IP
-#         id: get-manager-ip
-#         run: |
-#           swarm_manager_ip=$(terraform output -raw swarm_manager_ip)
-#           echo "::set-output name=manager-ip::$swarm_manager_ip"
+        run: |
+          echo "::set-output name=worker-ip::$(terraform output -raw worker1_public_ip)"
 
       - name: Initialize Docker Swarm
         run: |
-          ssh ubuntu@${{ steps.get-master-ip.outputs.master-ip }} "docker swarm init --advertise-addr ${{ steps.get-master-ip.outputs.master-ip }}"
+          ssh ubuntu@${{ steps.master_public_ip.outputs.master-ip }} "docker swarm init --advertise-addr ${{ steps.master_public_ip.outputs.master-ip }}"
     
       - name: Get Swarm Worker IP
         id: get-worker1-ip
         run: |
           swarm_worker1_ip=$(terraform output -raw swarm_worker1_ip)
           echo "::set-output name=worker-ip::$swarm_worker1_ip"
-
+          
       - name: Join Swarm Worker
         run: |
-          ssh ubuntu@${{ steps.get-manager-ip.outputs.manager-ip }} "docker swarm join-token worker | grep token"
-          ssh ubuntu@${{ steps.get-worker-ip.outputs.worker-ip }} "docker swarm join --token <worker_token> ${{ steps.get-manager-ip.outputs.manager-ip }}"
+          ssh ubuntu@${{ steps.master_public_ip.outputs.master-ip }} "docker swarm join-token worker | grep token"
+          ssh ubuntu@${{ steps.get-worker1-ip.outputs.worker-ip }} "docker swarm join --token <worker_token> ${{ steps.master_public_ip.outputs.master-ip }}"
