@@ -63,24 +63,24 @@ jobs:
 #       - name: Get EC2 instance manager IP address
 #         id: master_public_ip
 #         run: |
-#           echo "::set-output name=master-ip::$(terraform output -raw master_public_ip)"
+#           echo "::set-output name=master_public_ip::$(terraform output -raw master_public_ip)"
           
 #       - name: Get EC2 instance worker IP address
 #         id: worker1_public_ip
 #         run: |
-#           echo "::set-output name=worker-ip::$(terraform output -raw worker1_public_ip)"
+#           echo "::set-output name=worker1_public_ip::$(terraform output -raw worker1_public_ip)"
 
       - name: Initialize Docker Swarm
         run: |
-          ssh ubuntu@${{ steps.master_public_ip.outputs.master-ip }} "docker swarm init --advertise-addr ${{ steps.master_public_ip.outputs.master-ip }}"
+          ssh ubuntu@${{ steps.master_public_ip.outputs.master_public_ip }} "docker swarm init --advertise-addr ${{ steps.master_public_ip.outputs.master_public_ip }}"
     
       - name: Get Swarm Worker IP
         id: get-worker1-ip
         run: |
-          swarm_worker1_ip=$(terraform output -raw swarm_worker1_ip)
-          echo "::set-output name=worker-ip::$swarm_worker1_ip"
+          swarm_worker1_public-ip=$(terraform output -raw swarm_worker1_public_ip)
+          echo "::set-output name=worker1-public_ip::$swarm_worker1_public_ip"
           
       - name: Join Swarm Worker
         run: |
-          ssh ubuntu@${{ steps.master_public_ip.outputs.master-ip }} "docker swarm join-token worker | grep token"
-          ssh ubuntu@${{ steps.get-worker1-ip.outputs.worker-ip }} "docker swarm join --token <worker_token> ${{ steps.master_public_ip.outputs.master-ip }}"
+          ssh ubuntu@${{ steps.master_public_ip.outputs.master_public_ip }} "docker swarm join-token worker | grep token"
+          ssh ubuntu@${{ steps.get-worker1_public_ip.outputs.worker1_public_ip }} "docker swarm join --token <worker_token> ${{ steps.master_public_ip.outputs.master_public_ip }}"
