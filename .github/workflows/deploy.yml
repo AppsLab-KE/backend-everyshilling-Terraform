@@ -103,7 +103,7 @@ jobs:
             cd ~
             private_ip=$(terraform output master_private_ip)
             sudo docker swarm init --advertise-addr "$private_ip:2377"
-            sudo docker swarm join-token worker | grep token
+            # sudo docker swarm join-token worker | grep token
 
 
 
