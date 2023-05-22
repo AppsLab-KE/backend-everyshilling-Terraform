@@ -60,15 +60,15 @@ jobs:
           cd terraform
           terraform apply -auto-approve -var-file=tfvars/dev.tfvars
           
-      - name: Get EC2 instance manager IP address
-        id: master_public_ip
-        run: |
-          echo "::set-output name=master-ip::$(terraform output -raw master_public_ip)"
+#       - name: Get EC2 instance manager IP address
+#         id: master_public_ip
+#         run: |
+#           echo "::set-output name=master-ip::$(terraform output -raw master_public_ip)"
           
-      - name: Get EC2 instance worker IP address
-        id: worker1_public_ip
-        run: |
-          echo "::set-output name=worker-ip::$(terraform output -raw worker1_public_ip)"
+#       - name: Get EC2 instance worker IP address
+#         id: worker1_public_ip
+#         run: |
+#           echo "::set-output name=worker-ip::$(terraform output -raw worker1_public_ip)"
 
       - name: Initialize Docker Swarm
         run: |
