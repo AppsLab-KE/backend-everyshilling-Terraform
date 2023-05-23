@@ -14,6 +14,6 @@ jobs:
       - name: terraform-docs-gh-actions
         uses: terraform-docs/gh-actions@v1.0.0
         with:
-          config-file: .terraform-docs.yml
+          config-file: .terraform.docs.yml
           git-push: true
           git-push-sign-off: true
