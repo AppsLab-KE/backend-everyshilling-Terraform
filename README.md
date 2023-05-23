@@ -1,6 +1,6 @@
 # Architectural Sample for the Docker swarm
 
-![Docker swarm](templates/Capture1.JPG)
+![Docker swarm](templates/Capture.JPG)
 
 Requirements:
 - AWS Account as user
@@ -23,8 +23,10 @@ TO DO TASKS
 
  Click the 'Use this Template' button for your initial setup
 
-
 ## Setting up the infrastructure
+
+Terraform Readme is located at [terraform/TERRAFORM_README.md](terraform/TERRAFORM_README.md)
+
 
 ### To run all the Terraform commands at once
 
@@ -34,7 +36,7 @@ Make the file terraform_script.sh file executable ('chmod +x terraform_script.sh
 ./terraform_script.sh
 ```
 
- This provisions the infrastructure for the first time,and from the output copy those ip addresses key to the hosts file under inventoy directory.![inventory]()
+ This provisions the infrastructure for the first time,and from the output copy those ip addresses key to the hosts file under inventoy directory.[inventory]()
 
 
  Once all the configurations is set,run the terraform script again ```./terraform_script.sh ``` then this command from the ansible playbook which deploys the cluster
