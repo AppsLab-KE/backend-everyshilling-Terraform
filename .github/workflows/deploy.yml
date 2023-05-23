@@ -1,6 +1,5 @@
+# This workflow installs AWS CLI, Configures AWS Credentials and runs terraform steps that outputs master and worker public ip.
 name: Deploy Swarm Cluster
-
-
 on:
   push:
     branches:
@@ -60,49 +59,51 @@ jobs:
           cd terraform
           terraform apply -auto-approve -var-file=tfvars/dev.tfvars
           
-      - name: Get EC2 instance manager public IP address
-        id: master_public_ip
-        run: echo "master_public_ip=$(terraform output -raw master_public_ip)" >> ${{ env.GITHUB_ENV }}
+          # Docker Swarm Deploment.
+          
+#       - name: Get EC2 instance manager public IP address
+#         id: master_public_ip
+#         run: echo "master_public_ip=$(terraform output -raw master_public_ip)" >> ${{ env.GITHUB_ENV }}
 
-      - name: Get private IP from Terraform output
-        id: get-private-ip
-        run: echo "master_private_ip=$(terraform output -raw master_private_ip)" >> ${{ env.GITHUB_ENV }}
+#       - name: Get private IP from Terraform output
+#         id: get-private-ip
+#         run: echo "master_private_ip=$(terraform output -raw master_private_ip)" >> ${{ env.GITHUB_ENV }}
         
-      - name: SSH into EC2 instance and Initialize Docker swarm
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ steps.master_public_ip.outputs.master_public_ip }}:22
-          username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            echo "Connected to EC2 instance"
-            sudo su
-            cd ~
-            sudo apt-get update
-            sudo apt install docker.io
-            private_ip=$(terraform output master_private_ip)
-            sudo docker swarm init --advertise-addr "${{ steps.get-private-ip.outputs.master_private_ip }}:2377":22
-            sudo docker swarm join-token worker | grep token
+#       - name: SSH into EC2 instance and Initialize Docker swarm
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ steps.master_public_ip.outputs.master_public_ip }}:22
+#           username: ubuntu
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           port: 22
+#           script: |
+#             echo "Connected to EC2 instance"
+#             sudo su
+#             cd ~
+#             sudo apt-get update
+#             sudo apt install docker.io
+#             private_ip=$(terraform output master_private_ip)
+#             sudo docker swarm init --advertise-addr "${{ steps.get-private-ip.outputs.master_private_ip }}:2377":22
+#             sudo docker swarm join-token worker | grep token
 
-      - name: Get EC2 instance worker public IP address
-        id: worker1_public_ip
-        run: echo "worker1_public_ip=$(terraform output -raw worker1_public_ip)" >> ${{ env.GITHUB_ENV }}
+#       - name: Get EC2 instance worker public IP address
+#         id: worker1_public_ip
+#         run: echo "worker1_public_ip=$(terraform output -raw worker1_public_ip)" >> ${{ env.GITHUB_ENV }}
 
-      - name: SSH into EC2 instance and Join Swarm
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ steps.worker1_public_ip.outputs.worker1_public_ip }}:22
-          username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            echo "Connected to EC2 instance"
-            sudo su
-            cd ~
-            sudo apt-get update
-            sudo apt install docker.io
-            sudo docker swarm join --token <worker_token> $master_ip:2377
+#       - name: SSH into EC2 instance and Join Swarm
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ steps.worker1_public_ip.outputs.worker1_public_ip }}:22
+#           username: ubuntu
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           port: 22
+#           script: |
+#             echo "Connected to EC2 instance"
+#             sudo su
+#             cd ~
+#             sudo apt-get update
+#             sudo apt install docker.io
+#             sudo docker swarm join --token <worker_token> $master_ip:2377
 
 
 
