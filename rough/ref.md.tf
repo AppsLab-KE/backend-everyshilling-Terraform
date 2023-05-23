@@ -1,3 +1,4 @@
+3 SCRIPT INCASE ONE DECICDES TO USE AWS TERRAFORM ECS FOR THE SERVICES.
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
   cluster_name = format("everyshilling-%s", var.tags["environment"])
