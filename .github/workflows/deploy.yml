@@ -62,9 +62,7 @@ jobs:
           
       - name: Get EC2 instance manager public IP address
         id: master_public_ip
-        run: |
-          echo "master_public_ip=$(terraform output -raw master_public_ip)" >> $GITHUB_ENV
-
+        run: echo "master_public_ip=$(terraform output -raw master_public_ip)" >> $GITHUB_ENV
 
       - name: Get private IP from Terraform output
         id: get-private-ip
@@ -89,8 +87,7 @@ jobs:
 
       - name: Get EC2 instance worker public IP address
         id: worker1_public_ip
-        run: |
-          echo "worker1_public_ip=$(terraform output -raw worker1_public_ip)" >> $GITHUB_ENV
+        run: echo "worker1_public_ip=$(terraform output -raw worker1_public_ip)" >> $GITHUB_ENV
 
       - name: SSH into EC2 instance and Join Swarm
         uses: appleboy/ssh-action@master
@@ -109,12 +106,6 @@ jobs:
 
 
 
-#       - name: Get Swarm Worker IP
-#         id: get-worker1-ip
-#         run: |
-#           swarm_worker1_public-ip=$(terraform output -raw swarm_worker1_public_ip)
-#           echo "::set-output name=worker1-public_ip::$swarm_worker1_public_ip"
-          
 #       - name: Join Swarm Worker
 #         run: |
 #           ssh ubuntu@${{ steps.master_public_ip.outputs.master_public_ip }} "docker swarm join-token worker | grep token"
