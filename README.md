@@ -1,50 +1,134 @@
-## Requirements
+# Architectural Sample for the Docker swarm
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.62.0 |
+![Docker swarm](templates/Capture1.JPG)
 
-## Providers
+Requirements:
+- AWS Account as user
+- Terraform configured ( Could use the docker compose file to set it up)
+- AWS CLI installed and credentials configured.
+- Ansible setup
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.62.0 |
 
-## Modules
+## SETUP
+TO DO TASKS
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_ec2_instance"></a> [ec2\_instance](#module\_ec2\_instance) | terraform-aws-modules/ec2-instance/aws | 4.3.0 |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | 3.19.0 |
+- [x] Building and pushing the Docker images to Amazon ECR
+- [x] Setting up Infrastructure
+- [x] Setting up  CICD pipeline
+- [x] Ensuring all the services are up and running
+- [x] Testing the solution.
+-  Creating DNS Record for the  Load Balancer's
+- Setting up ssl security
+- Monitoring and tracing
 
-## Resources
+ Click the 'Use this Template' button for your initial setup
 
-| Name | Type |
-|------|------|
-| [aws_security_group.sg](https://registry.terraform.io/providers/hashicorp/aws/4.62.0/docs/resources/security_group) | resource |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/4.62.0/docs/data-sources/region) | data source |
 
-## Inputs
+## Setting up the infrastructure
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_ami_id"></a> [ami\_id](#input\_ami\_id) | Ec2 AMI ID to use | `string` | n/a | yes |
-| <a name="input_azs"></a> [azs](#input\_azs) | The availability zones for the region | `list(string)` | <pre>[<br>  "us-east-1a",<br>  "us-east-1b",<br>  "us-east-1c"<br>]</pre> | no |
-| <a name="input_ec2_instance_type"></a> [ec2\_instance\_type](#input\_ec2\_instance\_type) | EC2 instance type | `string` | n/a | yes |
-| <a name="input_enable_ec2_monitoring"></a> [enable\_ec2\_monitoring](#input\_enable\_ec2\_monitoring) | Enable EC2 monitoring | `bool` | n/a | yes |
-| <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | VPC private subnets | `list(string)` | n/a | yes |
-| <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | VPC public subnets | `list(string)` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | n/a | yes |
-| <a name="input_sg_ports"></a> [sg\_ports](#input\_sg\_ports) | Security group ports | <pre>map(object({<br>    port        = number<br>    protocol    = string<br>    cidr_blocks = list(string)<br>  }))</pre> | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | The tags to be used for the different resources in the Everyshilling application | `map(string)` | `{}` | no |
-| <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | IP Cidr for the VPC | `string` | n/a | yes |
+### To run all the Terraform commands at once
 
-## Outputs
+Make the file terraform_script.sh file executable ('chmod +x terraform_script.sh') and execute it by running:
 
-| Name | Description |
-|------|-------------|
-| <a name="output_azs"></a> [azs](#output\_azs) | n/a |
-| <a name="output_private_subnets"></a> [private\_subnets](#output\_private\_subnets) | n/a |
-| <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | n/a |
-| <a name="output_vpc_cidr"></a> [vpc\_cidr](#output\_vpc\_cidr) | n/a |
+```
+./terraform_script.sh
+```
+
+ This provisions the infrastructure for the first time,and from the output copy those ip addresses key to the hosts file under inventoy directory.![inventory]()
+
+
+ Once all the configurations is set,run the terraform script again ```./terraform_script.sh ``` then this command from the ansible playbook which deploys the cluster
+
+ ```
+ansible-playbook -i inventory/hosts playbook.yml
+ ```
+
+The swarm cluster should now be ready.To chck the cluster using ssh in manager node:
+
+```
+ssh -i your_key_file.pem ubuntu@manager_public_ip
+sudo docker node ls`
+
+```
+
+
+### BLABLABLA
+
+ To run the terraform files
+ ```
+terraform init
+ ```
+To set the resources to be provisioned use
+``` terraform plan  -var-file=tfvars/dev.tfvars ```
+ &&
+``` terraform apply -var-file=tfvars/dev.tfvars ```
+
+Doing terraform apply provisions the Docker Swarm resources, VPC with 3 instances (Worker and master)
+The shell script install_dockercompose.sh installs docker and docker compose in your servers.
+
+## Configuration Management
+
+Ansible script responsible for creating the swarm cluster (a manager and two worker node)
+
+The inventory/hosts directory should be changed to the ec2 instances ip addresses to enable ssh.
+
+ Playbook command:
+
+ ```
+ ansible-playbook -i inventory/hosts playbook.yml
+ ```
+
+
+
+### AOB:
+
+ 1. terraform init
+ 2. terraform plan  -var-file=tfvars/dev.tfvars
+ 3. terraform apply -var-file=tfvars/dev.tfvar
+
+To terminate the infrastructure :
+terraform destroy -var-file=tfvars/dev.tfvars
+
+
+Note:
+- To generate keys
+ssh-keygen
+cat ./ssh/id_rsa.pub
+aws configure --profile (set your profile)
+
+- Incase faced with lock state key. [Solution](https://stackoverflow.com/questions/62189825/terraform-error-acquiring-the-state-lock-conditionalcheckfailedexception)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Others incase of setting up Terraform using Docker compose
+```docker-compose up ```
+
+```docker-compose run --rm tf init
+```
+
+```docker compose run --rm tf fmt
+```
+
+```docker-compose run --rm tf validate
+```
+
+
+docker run -d -it --name terraform-ubuntu ubuntu
+
 
