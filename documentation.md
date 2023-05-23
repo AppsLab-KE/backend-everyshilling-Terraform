@@ -1,5 +1,5 @@
-# Architectural Sample for the Docker swarm
-
+# AIM: SETUP THE INFRASTRUCTURE USING TERRAFORM,then USING GITHUB ACTIONS FOR AUTOPROVISIONING.
+## Architectural Sample for the Docker swarm
 ![Docker swarm](templates/Capture1.JPG)
 
 Requirements:
@@ -9,33 +9,32 @@ Requirements:
 - Ansible setup
 
 
-## SETUP
-TO DO TASKS
-
-- [x] Building and pushing the Docker images to Amazon ECR
-- [x] Setting up Infrastructure
-- [x] Setting up  CICD pipeline
+## TO BE ACCOMPLISHED
+- [x] Building and pushing the Docker images to Amazon ECR (This step is accomplished on the [Backend Repo](https://github.com/AppsLab-KE/backend-everyshilling.git)
+- [x] Setting up Infrastructure (Uses Terraform as the IAC tool)
+- [x] Setting up  Autoprovisioning pipeline (can be viewed from the .github/workflow/main.yml file)
+- [ ] The playbook.yml and inventory folder are ansible setup that deploys the swarm cluster.
 - [x] Ensuring all the services are up and running (deployment)
-- [x] Testing the services.
--  Scheduling instances
--  Creating DNS Record for the  Load Balancer's
+- [x] Testing the services once the Swarm Cluster is deployed.
+-  Creating DNS Record for the Load Balancer's
 - Setting up ssl security
-- Monitoring and tracing
 
  Click the 'Use this Template' button for your initial setup
 
 
-## Setting up the infrastructure
+## Setting up the infrastructure locally
 
-### To run all the Terraform commands at once
+### To run all the Terraform commands at once locally execute :
 
-Make the file terraform_script.sh file executable ('chmod +x terraform_script.sh') and execute it by running:
+```
+ chmod +x terraform_script.sh and 
+ ```
 
 ```
 ./terraform_script.sh
 ```
 
- This provisions the infrastructure for the first time,and from the output copy those ip addresses key to the hosts file under inventoy directory.![inventory]()
+ This provisions the infrastructure for the first time,and from the output copy those ip addresses key to the hosts file under [inventory](inventory)
 
 
  Once all the configurations is set,run the terraform script again ```./terraform_script.sh ``` then this command from the ansible playbook which deploys the cluster
@@ -44,7 +43,7 @@ Make the file terraform_script.sh file executable ('chmod +x terraform_script.sh
 ansible-playbook -i inventory/hosts playbook.yml
  ```
 
-The swarm cluster should now be ready.To chck the cluster using ssh in manager node:
+The swarm cluster should now be ready.To check the cluster use ssh in manager node:
 
 ```
 ssh -i your_key_file.pem ubuntu@manager_public_ip
@@ -53,45 +52,41 @@ sudo docker node ls`
 ```
 
 
-### BLABLABLA
+### BLABLABLA OTHER DOCUMENTATIONS
 
- To run the terraform files
+ Configuring Terraform files(Initialize,plan and apply): 
+ 
  ```
 terraform init
  ```
-To set the resources to be provisioned use
-``` terraform plan  -var-file=tfvars/dev.tfvars ```
+
+```
+terraform plan  -var-file=tfvars/dev.tfvars 
+```
  &&
-``` terraform apply -var-file=tfvars/dev.tfvars ```
+ 
+```
+terraform apply -var-file=tfvars/dev.tfvars 
+```
+To terminate the infrastructure :
+terraform destroy -var-file=tfvars/dev.tfvars
 
 Doing terraform apply provisions the Docker Swarm resources, VPC with 3 instances (Worker and master)
 The shell script install_dockercompose.sh installs docker and docker compose in your servers.
 
-## Configuration Management
+### Configuration Management
 
 Ansible script responsible for creating the swarm cluster (a manager and two worker node)
 
 The inventory/hosts directory should be changed to the ec2 instances ip addresses to enable ssh.
 
- Playbook command:
+ Ansible Playbook command:
 
  ```
  ansible-playbook -i inventory/hosts playbook.yml
  ```
 
-
-
-### AOB:
-
- 1. terraform init
- 2. terraform plan  -var-file=tfvars/dev.tfvars
- 3. terraform apply -var-file=tfvars/dev.tfvar
-
-To terminate the infrastructure :
-terraform destroy -var-file=tfvars/dev.tfvars
-
-
-Note:
+### AWS CREDENTIALS
 - To generate keys
 ssh-keygen
 cat ./ssh/id_rsa.pub
@@ -100,24 +95,9 @@ aws configure --profile (set your profile)
 - Incase faced with lock state key. [Solution](https://stackoverflow.com/questions/62189825/terraform-error-acquiring-the-state-lock-conditionalcheckfailedexception)
 
 
+### Worried about installing Terraform on your machine ? use Docker image (docker-compose.yml file)
+Commands to run the file: 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Others incase of setting up Terraform using Docker compose
 ```docker-compose up ```
 
 ```docker-compose run --rm tf init
@@ -128,7 +108,6 @@ aws configure --profile (set your profile)
 
 ```docker-compose run --rm tf validate
 ```
-
 
 docker run -d -it --name terraform-ubuntu ubuntu
 
