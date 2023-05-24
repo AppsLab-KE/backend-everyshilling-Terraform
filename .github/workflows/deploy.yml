@@ -57,13 +57,41 @@ jobs:
         if: steps.workspace.outputs.changed != 'true'
         run: |
           cd terraform
-          terraform apply -auto-approve -var-file=tfvars/dev.tfvars
+          terraform apply -auto-approve -var-file=tfvars/dev.tfvars | tee output.txt
           
-          # Docker Swarm Deploment.
+      - name: Extract master IP addresses
+        run: |
+          echo "Master IP address:"
+          grep -oE 'master_public_ip = \b([0-9]{1,3}\.){3}[0-9]{1,3}\b' output.txt | awk '{print $NF}'
+        env:
+          OUTPUT_FILE: output.txt
+    
+      - name: Set SSH known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ steps.extract_master_ips.outputs.master_ip_address }} >> ~/.ssh/known_hosts
+
+     
+      - name: Run Swarm setup script on master
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ steps.get_master_ip.outputs.master_public_ip }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+           IFS=', ' read -r -a NODE_IPS <<< "$HOST"
+            bash deploy_swarm.sh
+
+#       - name: Run Swarm setup script on worker
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ steps.get_worker_ip.outputs.worker_ip_address }}
+#           username: ubuntu
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           script: |
+#             bash deploy_swarm.sh
+
           
-#       - name: Get EC2 instance manager public IP address
-#         id: master_public_ip
-#         run: echo "master_public_ip=$(terraform output -raw master_public_ip)" >> ${{ env.GITHUB_ENV }}
 
 #       - name: Get private IP from Terraform output
 #         id: get-private-ip
