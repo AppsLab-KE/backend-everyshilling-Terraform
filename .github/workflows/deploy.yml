@@ -58,6 +58,8 @@ jobs:
         run: |
           cd terraform
           terraform apply -auto-approve -var-file=tfvars/dev.tfvars | tee output.txt
+          terraform output -json > output.json
+          jq -r '.master_public_ip.value' output.json > output.txt
           
       - name: Extract master IP addresses
         run: |
@@ -69,10 +71,7 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
-        env:
-          HOST: ${{ steps.get_maste_ips.outputs.master_public_ip}}
-
+          ssh-keyscan -H "${{ steps.get_master_ips.outputs.master_public_ip }}" >> ~/.ssh/known_hosts
      
       - name: Run Swarm setup script on master
         uses: appleboy/ssh-action@master
