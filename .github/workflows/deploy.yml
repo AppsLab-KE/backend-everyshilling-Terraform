@@ -41,11 +41,11 @@ jobs:
           cd terraform
           terraform init
           
-      - name: Terraform Workspace
-        id: workspace
-        run: |
-          cd terraform
-          terraform workspace select dev || terraform workspace new dev
+#       - name: Terraform Workspace
+#         id: workspace
+#         run: |
+#           cd terraform
+#           terraform workspace select dev || terraform workspace new dev
           
       - name: Terraform Refresh
         if: steps.workspace.outputs.changed == 'true'
@@ -66,10 +66,12 @@ jobs:
         env:
           OUTPUT_FILE: output.txt
     
-      - name: Set SSH known_hosts
+      - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ steps.extract_master_ips.outputs.master_ip_address }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+        env:
+          HOST: ${{ steps.get_maste_ips.outputs.master_public_ip}}
 
      
       - name: Run Swarm setup script on master
