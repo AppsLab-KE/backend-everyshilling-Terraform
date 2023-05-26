@@ -1,4 +1,4 @@
-# Architectural Sample for the Docker swarm
+# Architectural Sample for Infarustructure Provisioning
 
 ![Docker swarm](templates/Capture.JPG)
 
